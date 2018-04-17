@@ -38,7 +38,7 @@ class Summarizer:
 	def easySummarize(self):
 		print("Not Yet Implemented")
 
-	#parses List of sentences with lexrank to output List of rankings
+	#parses List of sentences with lexrank to output List of ranking scores
 	def makeRank(self):
 		print("Not Yet Implemented")
 
