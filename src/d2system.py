@@ -101,9 +101,11 @@ class Summarizer:
     #parses List of Sentences with lexrank to output summary
     def easy_summarize(self, lexrank_obj):
         lexrank_docs = self.topic.dump_sentences()
-        summary = lexrank_obj.get_summary(lexrank_docs, summary_size=2, threshold=.1)
-        print(summary)
-        # print("Not Yet Implemented")
+        summary = lexrank_obj.get_summary(lexrank_docs, summary_size=5, threshold=.1)
+
+        summary_output = open("outputs/D2/"+self.topic.id[:-1]+"-A.M.100."+self.topic.id[-1]+".8",'w')
+        for sentence in summary: summary_output.write(sentence.replace('\n',' ') + "\n")
+        #print(summary)
 
     #parses List of sentences with lexrank to output List of ranking scores
     def make_rank(self):
@@ -132,13 +134,14 @@ class Conductor:
     def _make_lexrank_obj(self):
         idf_docs = [doc for summ in self.summarizers for doc in summ.topic.docs]
         lxr = LexRank(idf_docs, stopwords=STOPWORDS['en'])
+        #print(lxr._calculate_idf())
         return lxr
 
 
 if __name__ == '__main__':
     # TODO: iterate over all xml files
     conductor = Conductor(sys.argv[1])
-    # print(len(conductor.summarizers))
+    #print(len(conductor.summarizers))
     for summ in conductor.summarizers:
         summ.easy_summarize(conductor.lexrank_obj)
 
