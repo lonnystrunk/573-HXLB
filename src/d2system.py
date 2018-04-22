@@ -3,6 +3,7 @@ import sys
 from lxml import etree
 from lxml import html
 from lexrank import STOPWORDS, LexRank
+import nltk
 
 
 class Document:
@@ -52,9 +53,19 @@ class Document:
                         text = each.find("TEXT")
                         try:
                             for paragraph in text.findall("P"):
-                                text_block.append(paragraph.text.strip())
+                                raw = paragraph.text.strip()
+                                cleaned = raw.replace("\n", " ")
+                                cleaned = cleaned.replace("  ", " ")
+                                sentences = nltk.sent_tokenize(cleaned)
+                                for sent in sentences:
+                                    text_block.append(sent)
                         except AttributeError:
-                            text_block.append(text.text.strip())
+                            raw = text.text.strip()
+                            cleaned = raw.replace("\n", " ")
+                            cleaned = cleaned.replace("  ", " ")
+                            sentences = nltk.sent_tokenize(cleaned)
+                            for sent in sentences:
+                                text_block.append(sent)
         else: # AQUAINT 1
             with open(self.file_path, "r") as f:
                 g = "<root>"+f.read().replace("\n", "")+"</root>"
@@ -67,11 +78,22 @@ class Document:
                             try:
                                 for paragraph in each.find("text"):
                                     if paragraph.tag == "p":
-                                        text_block.append(paragraph.text.strip())
+                                        raw = paragraph.text.strip()
+                                        cleaned = raw.replace("\n", " ")
+                                        cleaned = cleaned.replace("  ", " ")
+                                        sentences = nltk.sent_tokenize(cleaned)
+                                        for sent in sentences:
+                                            text_block.append(sent)
                             except AttributeError:
                                 text = each.find("text")
-                                text_block.append(text.text.strip())
+                                raw = text.text.strip()
+                                cleaned = raw.replace("\n", " ")
+                                cleaned = cleaned.replace("  ", " ")
+                                sentences = nltk.sent_tokenize(cleaned)
+                                for sent in sentences:
+                                    text_block.append(sent)
         # TODO: separate block into sentences
+
         return text_block
 
 
