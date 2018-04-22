@@ -1,0 +1,67 @@
+<TACtaskdata year="2010" track="SUMMARIZATION" task="GUIDED"  dataset="TEST">
+
+<topic id = "D1004A" category = "1">
+
+	<title> Papua Tsunami </title>
+
+	<docsetA id = "D1004A-A">
+		<doc id = "XIE19980718.0080" />
+		<doc id = "XIE19980718.0082" />
+		<doc id = "APW19980718.0229" />
+		<doc id = "APW19980718.0805" />
+		<doc id = "APW19980718.0828" />
+		<doc id = "APW19980718.0831" />
+		<doc id = "APW19980718.0833" />
+		<doc id = "XIE19980719.0035" />
+		<doc id = "APW19980719.0060" />
+		<doc id = "XIE19980719.0133" />
+	</docsetA>
+
+	<docsetB id = "D1004A-B">
+		<doc id = "APW19980720.0063" />
+		<doc id = "XIE19980720.0105" />
+		<doc id = "APW19980720.0117" />
+		<doc id = "XIE19980720.0153" />
+		<doc id = "APW19980720.0192" />
+		<doc id = "APW19980720.0200" />
+		<doc id = "NYT19980720.0321" />
+		<doc id = "XIE19980721.0022" />
+		<doc id = "XIE19980721.0057" />
+		<doc id = "XIE19980721.0147" />
+	</docsetB>
+
+</topic>
+
+<topic id = "D1003A" category = "4">
+
+	<title> Giant Panda </title>
+
+	<docsetA id = "D1003A-A">
+		<doc id = "XIN_ENG_20041019.0235" />
+		<doc id = "AFP_ENG_20050128.0218" />
+		<doc id = "XIN_ENG_20050210.0029" />
+		<doc id = "XIN_ENG_20050213.0159" />
+		<doc id = "XIN_ENG_20050216.0036" />
+		<doc id = "AFP_ENG_20050216.0354" />
+		<doc id = "XIN_ENG_20050222.0273" />
+		<doc id = "XIN_ENG_20050327.0010" />
+		<doc id = "AFP_ENG_20050328.0133" />
+		<doc id = "AFP_ENG_20050329.0028" />
+	</docsetA>
+
+	<docsetB id = "D1003A-B">
+		<doc id = "XIN_ENG_20050403.0018" />
+		<doc id = "APW_ENG_20050410.0049" />
+		<doc id = "XIN_ENG_20050415.0040" />
+		<doc id = "CNA_ENG_20050503.0042" />
+		<doc id = "CNA_ENG_20050504.0009" />
+		<doc id = "AFP_ENG_20050507.0219" />
+		<doc id = "XIN_ENG_20050511.0159" />
+		<doc id = "LTW_ENG_20050709.0007" />
+		<doc id = "LTW_ENG_20050709.0028" />
+		<doc id = "LTW_ENG_20050709.0037" />
+	</docsetB>
+
+</topic>
+
+</TACtaskdata>
