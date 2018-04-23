@@ -1,11 +1,7 @@
-#/bin/sh
-
-cd ..
-
+#!/bin/sh
 if [ ! -d "py36" ]
 then
     virtualenv py36 -p /opt/python-3.6/bin/python3
-    pip install -r src/ requirements.txt
 fi
 
 if [ ! -L "AQUAINT" ] || [ ! -L "AQUIANT-2" ]
@@ -15,5 +11,6 @@ then
 fi
 
 . py36/bin/activate
+pip install -r src/requirements.txt
 python src/d2system.py $@
 deactivate
