@@ -1,5 +1,7 @@
 #from path import Path
 import sys
+import os
+import re
 from lxml import etree
 from lxml import html
 from lexrank import STOPWORDS, LexRank
@@ -148,17 +150,18 @@ class Summarizer:
 
 class Conductor:
     def __init__(self, itinerary):
-        self.itinerary = itinerary #path to .xml file with names of training documents
+        self.itineraries = itinerary #path to .xml file with names of training documents
         self.summarizers = self._make_summarizers()
         self.lexrank_obj = self._make_lexrank_obj()
 
     #updates self.topics with Topic objects, using self.itinerary as guidance on how to group data
     def _make_summarizers(self):
         summarizers = []
-        doc = etree.parse(self.itinerary)
-        list_of_topic_elements = doc.findall("topic")
-        for topic_element in list_of_topic_elements:
-            summarizers.append(Summarizer(topic_element))
+        for itinerary in self.itineraries:
+            doc = etree.parse(itinerary)
+            list_of_topic_elements = doc.findall("topic")
+            for topic_element in list_of_topic_elements:
+                summarizers.append(Summarizer(topic_element))
         return summarizers
 
     def _make_lexrank_obj(self):
@@ -170,7 +173,8 @@ class Conductor:
 
 if __name__ == '__main__':
     # TODO: iterate over all xml files
-    conductor = Conductor(sys.argv[1])
+    xml_files = [os.path.join(sys.argv[1], f) for f in os.listdir(sys.argv[1]) if re.match(r'.+\.xml', f)]
+    conductor = Conductor(xml_files)
     #print(len(conductor.summarizers))
     for summ in conductor.summarizers:
         summ.easy_summarize(conductor.lexrank_obj)
