@@ -13,4 +13,5 @@ fi
 . py36/bin/activate
 pip install -r src/requirements.txt
 python src/d2system.py $@
+python /dropbox/17-18/573/code/ROUGE/run_rouge.py src/rouge_run_ex.xml > /results/D2_rouge_scores.out
 deactivate
