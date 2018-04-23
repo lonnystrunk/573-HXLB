@@ -68,7 +68,7 @@ class Document:
                                 text_block.append(sent)
         else: # AQUAINT 1
             with open(self.file_path, "r") as f:
-                g = "<root>"+f.read().replace("\n", "")+"</root>"
+                g = "<root>"+f.read().replace("\n", " ")+"</root>"
                 new_doc = html.fromstring(g)
                 for each in new_doc:
                     if each.tag == "doc":
@@ -92,7 +92,6 @@ class Document:
                                 sentences = nltk.sent_tokenize(cleaned)
                                 for sent in sentences:
                                     text_block.append(sent)
-        # TODO: separate block into sentences
 
         return text_block
 
@@ -123,10 +122,19 @@ class Summarizer:
     #parses List of Sentences with lexrank to output summary
     def easy_summarize(self, lexrank_obj):
         lexrank_docs = self.topic.dump_sentences()
-        summary = lexrank_obj.get_summary(lexrank_docs, summary_size=5, threshold=.1)
-
-        summary_output = open("outputs/D2/"+self.topic.id[:-1]+"-A.M.100."+self.topic.id[-1]+".8",'w')
-        for sentence in summary: summary_output.write(sentence.replace('\n',' ') + "\n")
+        summary = lexrank_obj.get_summary(lexrank_docs, summary_size=10, threshold=.1)
+        summary_output = open("outputs/D2/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        word_count = 0
+        word_count_total = 0
+        while word_count <= 100:
+            sent = summary[0]
+            word_count += len(sent.split())
+            if word_count <= 100:
+                summary_output.write(sent + "\n")
+                word_count_total += len(sent.split())
+            summary.pop(0)
+        # print(word_count)
+        # print(word_count_total)
         #print(summary)
 
     #parses List of sentences with lexrank to output List of ranking scores
