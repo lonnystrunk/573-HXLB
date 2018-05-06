@@ -6,6 +6,8 @@ from lxml import etree
 from lxml import html
 from lexrank import STOPWORDS, LexRank
 import nltk
+from datetime import datetime as dt
+from numpy import argmax
 
 
 class Document:
@@ -116,7 +118,7 @@ class Topic:
         return [sent for doc in self.docs for sent in doc.sentences]
 
     def dump_chrono(self):
-        
+        return [doc.date for doc in self.docs for sent in doc.sentences]
 
 
 class Summarizer:
@@ -147,9 +149,23 @@ class Summarizer:
         lexrank_docs = self.topic.dump_sentences()
         return lexrank_obj.rank_sentences(lexrank_docs, threshold=None, fast_power_method=True)
 
+
     #parses List of rankings and List of sentences to return summary
-    def rank_summarize(self):
-        print("Not Yet Implemented")
+    def chrono_summarize(self, lexrank_obj):
+        rankings = self.make_rank(lexrank_obj)
+        sents = self.topic.dump_sentences()
+        chrono = self.topic.dump_chrono()
+        word_count = 0
+        idxs = []
+        while word_count <= 100:
+            best_idx = argmax(rankings)
+            idxs.append(best_idx)
+            rankings[best_idx] = float("-inf")
+            word_count += len(sents[best_idx])
+        chrono = [dt.strptime(chrono[x],"%Y%m%d") for x in idxs]
+        selections = [sents[x] for x in idxs]
+        sorted = [x for _,x in sorted(zip(chrono, selections))]
+        return('\n'.join(sorted))
 
 
 class Conductor:
