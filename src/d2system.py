@@ -139,6 +139,54 @@ class Summarizer:
         # print(word_count_total)
         #print(summary)
 
+    def ordered_summarize(self, lexrank_obj):
+        lexrank_docs = self.topic.dump_sentences()
+        summary = lexrank_obj.get_summary(lexrank_docs, summary_size=8, threshold=.1)
+        
+        document = []
+        for sentence in summary:
+            document = self.greedy_order(document,sentence,lexrank_obj)
+
+        summary_output = open("outputs/D2/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        word_count = 0
+        word_count_total = 0
+        while word_count <= 100:
+            if not document:break
+            sent = document[0]
+            word_count += len(sent.split())
+            if word_count <= 100:
+                summary_output.write(sent + "\n")
+                word_count_total += len(sent.split())
+            document.pop(0)
+
+    def get_coherence(self,lexrank_obj,document):
+        n = len(document)
+        if n == 1:
+            return 0
+        else:
+            denom = n-1
+            sim_sum = 0
+            for i in range(n-1):
+                sim = lexrank_obj.sentences_similarity(document[i],document[i+1])
+                sim_sum += sim
+            return sim_sum/denom
+
+    def greedy_order(self,document,sentence,lexrank_obj):
+        doc_n = None
+        t = 1
+        coh_max = -1
+        doc_tmp = document[:]
+        doc_len = len(document)
+        while (t <= doc_len+1):
+            doc_tmp.insert(t-1,sentence)
+            coh_tmp = self.get_coherence(lexrank_obj,doc_tmp)
+            if (coh_tmp > coh_max):
+                doc_n = doc_tmp[:]
+                coh_max = coh_tmp
+            del doc_tmp[t - 1]
+            t += 1
+        return doc_n
+
     #parses List of sentences with lexrank to output List of ranking scores
     def make_rank(self):
         print("Not Yet Implemented")
@@ -177,7 +225,8 @@ if __name__ == '__main__':
     conductor = Conductor(xml_files)
     #print(len(conductor.summarizers))
     for summ in conductor.summarizers:
-        summ.easy_summarize(conductor.lexrank_obj)
+        #summ.easy_summarize(conductor.lexrank_obj)
+        summ.ordered_summarize(conductor.lexrank_obj)
 
 
 
