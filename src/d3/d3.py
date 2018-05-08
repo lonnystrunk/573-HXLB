@@ -1,6 +1,3 @@
-#from path import Path
-import sys
-import os
 import re
 from lxml import etree
 from lxml import html
@@ -125,7 +122,7 @@ class Summarizer:
     def easy_summarize(self, lexrank_obj):
         lexrank_docs = self.topic.dump_sentences()
         summary = lexrank_obj.get_summary(lexrank_docs, summary_size=10, threshold=.1)
-        summary_output = open("outputs/D2/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        summary_output = open("outputs/D3/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
         word_count = 0
         word_count_total = 0
         while word_count <= 100:
@@ -169,17 +166,3 @@ class Conductor:
         lxr = LexRank(idf_docs, stopwords=STOPWORDS['en'])
         #print(lxr._calculate_idf())
         return lxr
-
-
-if __name__ == '__main__':
-    # TODO: iterate over all xml files
-    xml_files = [os.path.join(sys.argv[1], f) for f in os.listdir(sys.argv[1]) if re.match(r'.+\.xml', f)]
-    conductor = Conductor(xml_files)
-    #print(len(conductor.summarizers))
-    for summ in conductor.summarizers:
-        summ.easy_summarize(conductor.lexrank_obj)
-
-
-
-
-

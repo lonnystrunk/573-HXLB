@@ -1,0 +1,71 @@
+<TACtaskdata year="2010" track="SUMMARIZATION" task="GUIDED"  dataset="TEST">
+
+<topic id = "D0907B">
+
+	<title> John Yoo </title>
+
+	<narrative>
+		Describe the views and activities of John C. Yoo.
+	</narrative>
+
+	<docsetA id = "D0907B-A">
+		<doc id = "AFP_ENG_20041218.0339" />
+		<doc id = "NYT_ENG_20050104.0212" />
+		<doc id = "LTW_ENG_20050106.0044" />
+		<doc id = "APW_ENG_20050106.0105" />
+		<doc id = "LTW_ENG_20050110.0094" />
+		<doc id = "LTW_ENG_20050122.0044" />
+		<doc id = "LTW_ENG_20050202.0069" />
+		<doc id = "NYT_ENG_20050219.0010" />
+		<doc id = "LTW_ENG_20050420.0047" />
+		<doc id = "LTW_ENG_20050525.0042" />
+	</docsetA>
+
+	<docsetB id = "D0907B-B">
+		<doc id = "LTW_ENG_20050714.0026" />
+		<doc id = "LTW_ENG_20050720.0007" />
+		<doc id = "LTW_ENG_20050721.0029" />
+		<doc id = "NYT_ENG_20050729.0349" />
+		<doc id = "NYT_ENG_20050813.0043" />
+		<doc id = "NYT_ENG_20050915.0052" />
+		<doc id = "LTW_ENG_20051004.0032" />
+		<doc id = "NYT_ENG_20051004.0222" />
+		<doc id = "APW_ENG_20051102.1021" />
+		<doc id = "LTW_ENG_20051213.0076" />
+	</docsetB>
+
+</topic>
+
+<topic id = "D1005A" category = "3">
+
+	<title> Parkinson Disease </title>
+
+	<docsetA id = "D1005A-A">
+		<doc id = "APW_ENG_20041007.0256" />
+		<doc id = "APW_ENG_20041010.0097" />
+		<doc id = "NYT_ENG_20041011.0198" />
+		<doc id = "LTW_ENG_20041013.0110" />
+		<doc id = "LTW_ENG_20041014.0093" />
+		<doc id = "APW_ENG_20041019.0121" />
+		<doc id = "NYT_ENG_20041026.0087" />
+		<doc id = "LTW_ENG_20041028.0121" />
+		<doc id = "AFP_ENG_20041102.0814" />
+		<doc id = "AFP_ENG_20041104.0778" />
+	</docsetA>
+
+	<docsetB id = "D1005A-B">
+		<doc id = "NYT_ENG_20041125.0079" />
+		<doc id = "XIN_ENG_20041128.0228" />
+		<doc id = "APW_ENG_20041223.0196" />
+		<doc id = "AFP_ENG_20050104.0181" />
+		<doc id = "AFP_ENG_20050111.0739" />
+		<doc id = "AFP_ENG_20050117.0580" />
+		<doc id = "AFP_ENG_20050122.0318" />
+		<doc id = "AFP_ENG_20050129.0382" />
+		<doc id = "APW_ENG_20050204.0996" />
+		<doc id = "NYT_ENG_20050211.0181" />
+	</docsetB>
+
+</topic>
+
+</TACtaskdata>
