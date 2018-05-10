@@ -121,17 +121,19 @@ class Summarizer:
     #parses List of Sentences with lexrank to output summary
     def easy_summarize(self, lexrank_obj):
         lexrank_docs = self.topic.dump_sentences()
-        summary = lexrank_obj.get_summary(lexrank_docs, summary_size=10, threshold=.1)
-        summary_output = open("outputs/D3/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        stemmed_decs = self._stemming(lexrank_docs)
+        summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=10, threshold=.1)
+        summary_cont = [lexrank_docs[x] for x in summary_idx]
+        summary_output = open("outputs/D2/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
         word_count = 0
         word_count_total = 0
         while word_count <= 100:
-            sent = summary[0]
+            sent = summary_cont[0]
             word_count += len(sent.split())
             if word_count <= 100:
                 summary_output.write(sent + "\n")
                 word_count_total += len(sent.split())
-            summary.pop(0)
+            summary_cont.pop(0)
         # print(word_count)
         # print(word_count_total)
         #print(summary)
@@ -143,6 +145,20 @@ class Summarizer:
     #parses List of rankings and List of sentences to return summary
     def rank_summarize(self):
         print("Not Yet Implemented")
+
+    def _stemming(self, lexrank_docs):
+        stemmer = nltk.stem.SnowballStemmer("english")
+        stemmed_text = []
+        for sent in lexrank_docs:
+            tokens = nltk.word_tokenize(sent)
+            output = [stemmer.stem(word) for word in tokens]
+            stemmed_sent = " ".join(output)
+            stemmed_text.append(stemmed_sent)
+        stemmed_tuples = list(enumerate(stemmed_text))
+        stemmed_sentence_map = {}
+        for tup in stemmed_tuples:
+            stemmed_sentence_map[tup[1]] = tup[0]
+        return stemmed_tuples, stemmed_sentence_map
 
 
 class Conductor:
@@ -162,7 +178,18 @@ class Conductor:
         return summarizers
 
     def _make_lexrank_obj(self):
-        idf_docs = [doc for summ in self.summarizers for doc in summ.topic.docs]
-        lxr = LexRank(idf_docs, stopwords=STOPWORDS['en'])
-        #print(lxr._calculate_idf())
+        idf_stemmed_docs = [self._stemming(doc) for summ in self.summarizers for doc in summ.topic.docs]
+        # stemmed_docs = self._stemming(idf_docs)
+        lxr = LexRank(idf_stemmed_docs, stopwords=STOPWORDS['en'])
+        # print(lxr._calculate_idf())
         return lxr
+
+    def _stemming(self, doc):
+        stemmer = nltk.stem.SnowballStemmer("english")
+        stemmed_text = []
+        for sent in doc.sentences:
+            tokens = nltk.word_tokenize(sent)
+            output = [stemmer.stem(word) for word in tokens]
+            stemmed_sent = " ".join(output)
+            stemmed_text.append(stemmed_sent)
+        return stemmed_text
