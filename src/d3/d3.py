@@ -154,11 +154,7 @@ class Summarizer:
             output = [stemmer.stem(word) for word in tokens]
             stemmed_sent = " ".join(output)
             stemmed_text.append(stemmed_sent)
-        stemmed_tuples = list(enumerate(stemmed_text))
-        stemmed_sentence_map = {}
-        for tup in stemmed_tuples:
-            stemmed_sentence_map[tup[1]] = tup[0]
-        return stemmed_tuples, stemmed_sentence_map
+        return stemmed_text
 
 
 class Conductor:
