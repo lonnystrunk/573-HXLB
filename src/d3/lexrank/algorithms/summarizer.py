@@ -48,7 +48,7 @@ class LexRank:
         sorted_ix = np.argsort(lex_scores)[::-1]
         summary = [sentences[i] for i in sorted_ix[:summary_size]]
 
-        return sorted_ix
+        return sorted_ix[:summary_size]
 
     def rank_sentences(
         self,
