@@ -124,7 +124,7 @@ class Summarizer:
         stemmed_decs = self._stemming(lexrank_docs)
         summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=10, threshold=.1)
         summary_cont = [lexrank_docs[x] for x in summary_idx]
-        summary_output = open("outputs/D2/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        summary_output = open("outputs/D3/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
         word_count = 0
         word_count_total = 0
         while word_count <= 100:
