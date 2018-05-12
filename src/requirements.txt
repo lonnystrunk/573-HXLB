@@ -1,5 +1,4 @@
 attrs==18.1.0
-lexrank==0.0.1b0
 lxml==4.2.1
 more-itertools==4.1.0
 nltk==3.2.5
