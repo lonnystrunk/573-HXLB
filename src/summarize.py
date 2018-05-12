@@ -11,4 +11,5 @@ if __name__ == '__main__':
     conductor = summarize.Conductor(xml_files)
     #print(len(conductor.summarizers))
     for summ in conductor.summarizers:
-        summ.easy_summarize(conductor.lexrank_obj)
+        #summ.easy_summarize(conductor.lexrank_obj)
+        summ.ordered_summarize(conductor.lexrank_obj)

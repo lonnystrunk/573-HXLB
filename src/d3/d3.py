@@ -124,9 +124,11 @@ class Summarizer:
         if stemming:
             stemmed_decs = self._stemming(lexrank_docs)
             summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=10, threshold=.1)
-            summary = [lexrank_docs[x] for x in summary_idx]
+            #summary = [lexrank_docs[x] for x in summary_idx]
         else:
-            summary = lexrank_obj.get_summary(lexrank_docs, summary_size=10, threshold=.1)
+            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=10, threshold=.1)
+        
+        summary = [lexrank_docs[x] for x in summary_idx]
         summary_output = open("outputs/D3/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
 
         word_count = 0
@@ -138,9 +140,61 @@ class Summarizer:
                 summary_output.write(sent + "\n")
                 word_count_total += len(sent.split())
             summary.pop(0)
-        # print(word_count)
-        # print(word_count_total)
-        # print(summary)
+
+    def ordered_summarize(self, lexrank_obj, stemming=True):
+        lexrank_docs = self.topic.dump_sentences()
+        if stemming:
+            stemmed_decs = self._stemming(lexrank_docs)
+            summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=10, threshold=.1)
+        else:
+            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=10, threshold=.1)
+
+        document = []
+        for index in summary_idx:
+            document = self.greedy_order(document,index,lexrank_obj,lexrank_docs)
+        
+        summary =  [lexrank_docs[x] for x in document]
+        summary_output = open("outputs/D3/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        
+        word_count = 0
+        word_count_total = 0
+        while word_count <= 100:
+            if not summary:break
+            sent = summary[0]
+            word_count += len(sent.split())
+            if word_count <= 100:
+                summary_output.write(sent + "\n")
+                word_count_total += len(sent.split())
+            summary.pop(0)
+
+
+    def get_coherence(self,lexrank_obj,document,lexrank_docs):
+        n = len(document)
+        if n == 1:
+            return 0
+        else:
+            denom = n-1
+            sim_sum = 0
+            for i in range(n-1):
+                sim = lexrank_obj.sentences_similarity(lexrank_docs[document[i]],lexrank_docs[document[i+1]])
+                sim_sum += sim
+            return sim_sum/denom
+
+    def greedy_order(self,document,index,lexrank_obj,lexrank_docs):
+        doc_n = None
+        t = 1
+        coh_max = -1
+        doc_tmp = document[:]
+        doc_len = len(document)
+        while (t <= doc_len+1):
+            doc_tmp.insert(t-1,index)
+            coh_tmp = self.get_coherence(lexrank_obj,doc_tmp,lexrank_docs)
+            if (coh_tmp > coh_max):
+                doc_n = doc_tmp[:]
+                coh_max = coh_tmp
+            del doc_tmp[t - 1]
+            t += 1
+        return doc_n
 
     #parses List of sentences with lexrank to output List of ranking scores
     def make_rank(self):

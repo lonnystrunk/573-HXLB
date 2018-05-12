@@ -13,5 +13,5 @@ fi
 . py36/bin/activate
 pip install -r src/requirements.txt
 python src/summarize.py $@
-python /dropbox/17-18/573/code/ROUGE/run_rouge.py src/rouge_run_ex.xml > results/rouge_scores.out
+python /dropbox/17-18/573/code/ROUGE/run_rouge.py src/rouge_run_ex.xml > results/D3_rouge_scores.out
 deactivate

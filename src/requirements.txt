@@ -1,4 +1,5 @@
 attrs==18.1.0
+idna==2.6
 lxml==4.2.1
 more-itertools==4.1.0
 nltk==3.2.5
@@ -11,3 +12,5 @@ pytest==3.5.1
 regex==2017.11.9
 scipy==1.0.0
 six==1.11.0
+uritools==2.1.0
+urlextract==0.8.3
