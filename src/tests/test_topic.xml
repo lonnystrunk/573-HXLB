@@ -11,6 +11,9 @@
 	<docsetA id = "D0907B-A">
 		<doc id = "AFP_ENG_20041218.0339" />
 		<doc id = "NYT_ENG_20050104.0212" />
+	</docsetA>
+
+	<docsetAremnant>
 		<doc id = "LTW_ENG_20050106.0044" />
 		<doc id = "APW_ENG_20050106.0105" />
 		<doc id = "LTW_ENG_20050110.0094" />
@@ -19,7 +22,7 @@
 		<doc id = "NYT_ENG_20050219.0010" />
 		<doc id = "LTW_ENG_20050420.0047" />
 		<doc id = "LTW_ENG_20050525.0042" />
-	</docsetA>
+	</docsetAremnant>
 
 	<docsetB id = "D0907B-B">
 		<doc id = "LTW_ENG_20050714.0026" />
@@ -36,34 +39,37 @@
 
 </topic>
 
-<topic id = "D1005A" category = "3">
+<topic id = "D1015C" category = "4">
 
-	<title> Parkinson Disease </title>
+	<title> Rain Forest Destruction </title>
 
-	<docsetA id = "D1005A-A">
-		<doc id = "APW_ENG_20041007.0256" />
-		<doc id = "APW_ENG_20041010.0097" />
-		<doc id = "NYT_ENG_20041011.0198" />
-		<doc id = "LTW_ENG_20041013.0110" />
-		<doc id = "LTW_ENG_20041014.0093" />
-		<doc id = "APW_ENG_20041019.0121" />
-		<doc id = "NYT_ENG_20041026.0087" />
-		<doc id = "LTW_ENG_20041028.0121" />
-		<doc id = "AFP_ENG_20041102.0814" />
-		<doc id = "AFP_ENG_20041104.0778" />
+	<docsetA id = "D1015C-A">
+		<doc id = "XIE19970214.0174" />
+		<doc id = "XIE19980408.0186" />
+		<doc id = "XIE19960412.0020" />
 	</docsetA>
 
-	<docsetB id = "D1005A-B">
-		<doc id = "NYT_ENG_20041125.0079" />
-		<doc id = "XIN_ENG_20041128.0228" />
-		<doc id = "APW_ENG_20041223.0196" />
-		<doc id = "AFP_ENG_20050104.0181" />
-		<doc id = "AFP_ENG_20050111.0739" />
-		<doc id = "AFP_ENG_20050117.0580" />
-		<doc id = "AFP_ENG_20050122.0318" />
-		<doc id = "AFP_ENG_20050129.0382" />
-		<doc id = "APW_ENG_20050204.0996" />
-		<doc id = "NYT_ENG_20050211.0181" />
+	<docsetAremnant>
+		<doc id = "XIE19960425.0064" />
+		<doc id = "XIE19960521.0167" />
+		<doc id = "XIE19960622.0230" />
+		<doc id = "XIE19970623.0147" />
+		<doc id = "XIE19960802.0193" />
+		<doc id = "XIE19970805.0167" />
+		<doc id = "XIE19960829.0233" />
+	</docsetAremnant>
+
+	<docsetB id = "D1015C-B">
+		<doc id = "NYT19980601.0065" />
+		<doc id = "NYT19980608.0212" />
+		<doc id = "APW19980611.1639" />
+		<doc id = "XIE19980612.0306" />
+		<doc id = "APW19980619.0300" />
+		<doc id = "NYT19980620.0134" />
+		<doc id = "NYT19980727.0361" />
+		<doc id = "APW19980808.0489" />
+		<doc id = "APW19980810.1029" />
+		<doc id = "NYT19980818.0108" />
 	</docsetB>
 
 </topic>
