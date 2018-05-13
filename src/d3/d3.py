@@ -145,9 +145,9 @@ class Summarizer:
         lexrank_docs = self.topic.dump_sentences()
         if stemming:
             stemmed_decs = self._stemming(lexrank_docs)
-            summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=10, threshold=.1)
+            summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=5, threshold=.1)
         else:
-            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=10, threshold=.1)
+            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=5, threshold=.1)
 
         document = []
         for index in summary_idx:
