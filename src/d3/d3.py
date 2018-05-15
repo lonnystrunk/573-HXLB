@@ -215,9 +215,10 @@ class Summarizer:
         idxs = []
         while word_count <= 100:
             best_idx = argmax(rankings)
-            idxs.append(best_idx)
-            rankings[best_idx] = float("-inf")
             word_count += len(sents[best_idx].split())
+            if word_count <=100:
+                idxs.append(best_idx)
+                rankings[best_idx] = float("-inf")
         chrono = [dt.strptime(chrono[x], "%Y%m%d") for x in idxs]
         selections = [sents[x] for x in idxs]
         sentences = [x for _, x in sorted(zip(chrono, selections))]
