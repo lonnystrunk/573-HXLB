@@ -217,12 +217,12 @@ class Summarizer:
             best_idx = argmax(rankings)
             idxs.append(best_idx)
             rankings[best_idx] = float("-inf")
-            word_count += len(sents[best_idx])
+            word_count += len(sents[best_idx].split())
         chrono = [dt.strptime(chrono[x], "%Y%m%d") for x in idxs]
         selections = [sents[x] for x in idxs]
-        sorted = [x for _, x in sorted(zip(chrono, selections))]
+        sentences = [x for _, x in sorted(zip(chrono, selections))]
         summary_output = open("outputs/D3/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
-        summary_output.write('\n'.join(sorted))
+        summary_output.write('\n'.join(sentences))
         summary_output.close()
 
 
