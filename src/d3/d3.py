@@ -221,7 +221,9 @@ class Summarizer:
         chrono = [dt.strptime(chrono[x], "%Y%m%d") for x in idxs]
         selections = [sents[x] for x in idxs]
         sorted = [x for _, x in sorted(zip(chrono, selections))]
-        return ('\n'.join(sorted))
+        summary_output = open("outputs/D3/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        summary_output.write('\n'.join(sorted))
+        summary_output.close()
 
 
     @staticmethod
