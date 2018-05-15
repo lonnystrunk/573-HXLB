@@ -1,7 +1,10 @@
 # 573-HXLB
 LING 573 Spring 2018
+
 Deliverable #3
+
 Group 8: Harita Kannan, Xiaopei Wu, Lonny Strunk, Ben McCready
+
 
 To run the code on Patas, enter into the base level of the directory: `$condor_submit src/D3.cmd`
 
