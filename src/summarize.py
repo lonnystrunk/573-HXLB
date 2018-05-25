@@ -2,7 +2,7 @@ import sys
 import os
 import re
 
-from d3 import d3 as summarize
+from d4 import d4 as summarize
 
 
 if __name__ == '__main__':
