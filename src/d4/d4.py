@@ -40,60 +40,60 @@ class Document:
             file_path = "AQUAINT/"+src.lower()+"/"+year+"/"+file_name
         return file_path
 
+    @staticmethod
+    def _preprocess(para):
+        raw = para.text.strip()
+        cleaned = raw.replace("\n", " ")
+        cleaned = cleaned.replace("  ", " ")
+        cleaned = cleaned.replace("  ", " ")
+        return cleaned
+
 
     def _get_sentences(self):
         text_block = []
         if self.is_aquaint_two:
             f = open(self.file_path, 'r')
-                new_doc = etree.parse(f)
-                target_docs = new_doc.findall("DOC")
-                for each in target_docs:
-                    if each.attrib["id"] == self.id:
-                        # print(self.id+"\n")
-                        # headline = each.find("HEADLINE")
-                        text = each.find("TEXT")
-                        try:
-                            for paragraph in text.findall("P"):
-                                raw = paragraph.text.strip()
-                                cleaned = raw.replace("\n", " ")
-                                cleaned = cleaned.replace("  ", " ")
-                                sentences = nltk.sent_tokenize(cleaned)
-                                for sent in sentences:
-                                    text_block.append(sent)
-                        except AttributeError:
-                            raw = text.text.strip()
-                            cleaned = raw.replace("\n", " ")
-                            cleaned = cleaned.replace("  ", " ")
+            new_doc = etree.parse(f)
+            target_docs = new_doc.findall("DOC")
+            for each in target_docs:
+                if each.attrib["id"] == self.id:
+                    # print(self.id+"\n")
+                    # headline = each.find("HEADLINE")
+                    text = each.find("TEXT")
+                    try:
+                        for paragraph in text.findall("P"):
+                            cleaned = self._preprocess(paragraph)
                             sentences = nltk.sent_tokenize(cleaned)
                             for sent in sentences:
                                 text_block.append(sent)
+                    except AttributeError:
+                        cleaned = self._preprocess(text)
+                        sentences = nltk.sent_tokenize(cleaned)
+                        for sent in sentences:
+                            text_block.append(sent)
             f.close()
         else: # AQUAINT 1
             f = open(self.file_path, 'r')
-                g = "<root>"+f.read().replace("\n", " ")+"</root>"
-                new_doc = html.fromstring(g)
-                for each in new_doc:
-                    if each.tag == "doc":
-                        no = each.find("docno")
-                        if no.text.strip() == self.id:
-                            # print(self.id+"\n")
-                            try:
-                                for paragraph in each.find("text"):
-                                    if paragraph.tag == "p":
-                                        raw = paragraph.text.strip()
-                                        cleaned = raw.replace("\n", " ")
-                                        cleaned = cleaned.replace("  ", " ")
-                                        sentences = nltk.sent_tokenize(cleaned)
-                                        for sent in sentences:
-                                            text_block.append(sent)
-                            except AttributeError:
-                                text = each.find("text")
-                                raw = text.text.strip()
-                                cleaned = raw.replace("\n", " ")
-                                cleaned = cleaned.replace("  ", " ")
-                                sentences = nltk.sent_tokenize(cleaned)
-                                for sent in sentences:
-                                    text_block.append(sent)
+            g = "<root>"+f.read().replace("\n", " ")+"</root>"
+            new_doc = html.fromstring(g)
+            for each in new_doc:
+                if each.tag == "doc":
+                    no = each.find("docno")
+                    if no.text.strip() == self.id:
+                        # print(self.id+"\n")
+                        try:
+                            for paragraph in each.find("text"):
+                                if paragraph.tag == "p":
+                                    cleaned = self._preprocess(paragraph)
+                                    sentences = nltk.sent_tokenize(cleaned)
+                                    for sent in sentences:
+                                        text_block.append(sent)
+                        except AttributeError:
+                            text = each.find("text")
+                            cleaned = self._preprocess(text)
+                            sentences = nltk.sent_tokenize(cleaned)
+                            for sent in sentences:
+                                text_block.append(sent)
             f.close()
         return text_block
 
@@ -194,10 +194,10 @@ class Summarizer:
         coh_max = -1
         doc_tmp = document[:]
         doc_len = len(document)
-        while (t <= doc_len+1):
+        while t <= doc_len+1:
             doc_tmp.insert(t-1,index)
             coh_tmp = self.get_coherence(lexrank_obj,doc_tmp,lexrank_docs)
-            if (coh_tmp > coh_max):
+            if coh_tmp > coh_max:
                 doc_n = doc_tmp[:]
                 coh_max = coh_tmp
             del doc_tmp[t - 1]
