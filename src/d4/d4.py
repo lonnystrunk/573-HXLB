@@ -44,7 +44,7 @@ class Document:
     def _get_sentences(self):
         text_block = []
         if self.is_aquaint_two:
-            with open(self.file_path, "r") as f:
+            f = open(self.file_path, 'r')
                 new_doc = etree.parse(f)
                 target_docs = new_doc.findall("DOC")
                 for each in target_docs:
@@ -67,8 +67,9 @@ class Document:
                             sentences = nltk.sent_tokenize(cleaned)
                             for sent in sentences:
                                 text_block.append(sent)
+            f.close()
         else: # AQUAINT 1
-            with open(self.file_path, "r") as f:
+            f = open(self.file_path, 'r')
                 g = "<root>"+f.read().replace("\n", " ")+"</root>"
                 new_doc = html.fromstring(g)
                 for each in new_doc:
@@ -93,7 +94,7 @@ class Document:
                                 sentences = nltk.sent_tokenize(cleaned)
                                 for sent in sentences:
                                     text_block.append(sent)
-
+            f.close()
         return text_block
 
 
@@ -145,6 +146,7 @@ class Summarizer:
                 summary_output.write(sent + "\n")
                 word_count_total += len(sent.split())
             summary.pop(0)
+        summary_output.close()
 
     def ordered_summarize(self, lexrank_obj, stemming=True):
         lexrank_docs = self.topic.dump_sentences()
@@ -171,6 +173,7 @@ class Summarizer:
                 summary_output.write(sent + "\n")
                 word_count_total += len(sent.split())
             summary.pop(0)
+        summary_output.close()
 
 
     def get_coherence(self,lexrank_obj,document,lexrank_docs):
