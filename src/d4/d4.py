@@ -243,11 +243,12 @@ class Summarizer:
         summary_output.write('\n'.join(sentences))
         summary_output.close()
 
-    def test_firsts(self, lexrank_obj, weight):
+    def test_firsts(self, lexrank_obj, weight, f):
         rankings = self.make_rank(lexrank_obj)
         sents = self.topic.dump_sentences()
         firsts = self.topic.dump_firsts(weight)
         reranked = [rankings[i]*firsts[i] for i in range(len(rankings))]
+        f.write("weight: {}\n\trankings: {}\n\tfirsts: {}\n\treranked: {}\n".format(rankings, firsts, reranked))
         word_count = 0
         idxs = []
         while word_count <= 100:
@@ -256,6 +257,7 @@ class Summarizer:
             if word_count <= 100:
                 idxs.append(best_idx)
                 rankings[best_idx] = float("-inf")
+        f.write("\tidxs: {}\n\t".format(idxs))
         c = 0
         t = len(idxs)
         for idx in idxs:
