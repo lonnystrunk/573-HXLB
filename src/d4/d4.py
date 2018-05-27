@@ -151,8 +151,9 @@ class Summarizer:
     def ordered_summarize(self, lexrank_obj, stemming=True):
         lexrank_docs = self.topic.dump_sentences()
         if stemming:
-            stemmed_decs = self._stemming(lexrank_docs)
-            summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=5, threshold=.1)
+            stemmed_docs = self._stemming(lexrank_docs)
+            summary_idx = lexrank_obj.get_summary(stemmed_docs, summary_size=5, threshold=.1)
+
         else:
             summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=5, threshold=.1)
 
@@ -160,7 +161,15 @@ class Summarizer:
         for index in summary_idx:
             document = self.greedy_order(document,index,lexrank_obj,lexrank_docs)
         
-        summary =  [lexrank_docs[x] for x in document]
+        summary = [lexrank_docs[x] for x in document]
+        header_pattern = re.compile(r'[A-Z]+.*[-_] ')
+        for temp_sent in summary:
+            if re.match(header_pattern, temp_sent) is not None:
+                header_sent_position = summary.index(temp_sent)
+                summary.insert(0, summary.pop(header_sent_position))
+                new_sent = re.sub(header_pattern, "", summary[0])
+                summary[0] = new_sent
+
         summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
         
         word_count = 0
