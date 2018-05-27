@@ -162,7 +162,7 @@ class Summarizer:
             document = self.greedy_order(document,index,lexrank_obj,lexrank_docs)
         
         summary = [lexrank_docs[x] for x in document]
-        header_pattern = re.compile(r'[A-Z]+.*[-_] ')
+        header_pattern = re.compile(r'[A-Z][A-Z][A-Z]+.*[-_] ')
         for temp_sent in summary:
             if re.match(header_pattern, temp_sent) is not None:
                 header_sent_position = summary.index(temp_sent)
