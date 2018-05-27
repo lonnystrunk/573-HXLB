@@ -14,8 +14,8 @@ if __name__ == '__main__':
         c = 0
         t = 0
         for summ in conductor.summarizers:
-            count, total = summ.test_firsts(conductor.lexrank_obj, weight)
+            count, total = summ.test_firsts(conductor.lexrank_obj, weight, f)
             c+=count
             t+=total
-        f.write("{}/{} of selected sentences for weight {} are firsts.\n".format(c,t,weights))
+        f.write("{}/{} of selected sentences for weight {} are firsts.\n".format(t-c,t,weight))
     f.close()
