@@ -243,6 +243,25 @@ class Summarizer:
         summary_output.write('\n'.join(sentences))
         summary_output.close()
 
+    def test_firsts(self, lexrank_obj, weight):
+        rankings = self.make_rank(lexrank_obj)
+        sents = self.topic.dump_sentences()
+        firsts = self.topic.dump_firsts(weight)
+        reranked = [rankings[i]*firsts[i] for i in range(len(rankings))]
+        word_count = 0
+        idxs = []
+        while word_count <= 100:
+            best_idx = argmax(rankings)
+            word_count += len(sents[best_idx].split())
+            if word_count <= 100:
+                idxs.append(best_idx)
+                rankings[best_idx] = float("-inf")
+        c = 0
+        t = len(idxs)
+        for idx in idxs:
+            if firsts[idx] == 1.0:
+                c+=1
+        return(c,t)
 
     @staticmethod
     def _stemming(lexrank_docs):
