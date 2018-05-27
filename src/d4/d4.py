@@ -243,15 +243,16 @@ class Summarizer:
 
 
 class Conductor:
-    def __init__(self, itinerary):
-        self.itineraries = itinerary #path to .xml file with names of training documents
-        self.summarizers = self._make_summarizers()
+    def __init__(self, test_itinerary, training_itinerary=None):
+        self.test_itineraries = test_itinerary #path to .xml file with names of training documents
+        self.training_itineraries = training_itinerary
+        self.summarizers = self._make_summarizers(self.test_itineraries)
         self.lexrank_obj = self._make_lexrank_obj()
 
     #updates self.topics with Topic objects, using self.itinerary as guidance on how to group data
-    def _make_summarizers(self):
+    def _make_summarizers(self, itineraries):
         summarizers = []
-        for itinerary in self.itineraries:
+        for itinerary in itineraries:
             doc = etree.parse(itinerary)
             list_of_topic_elements = doc.findall("topic")
             for topic_element in list_of_topic_elements:
@@ -260,6 +261,8 @@ class Conductor:
 
     def _make_lexrank_obj(self, stemming=True):
         idf_docs = [doc for summ in self.summarizers for doc in summ.topic.docs]
+        if self.training_itineraries:
+            idf_docs.extend([doc for summ in self._make_summarizers(self.training_itineraries) for doc in summ.topic.docs])
         if stemming:
             idf_docs = [Summarizer._stemming(doc) for doc in idf_docs]
         lxr = LexRank(idf_docs, stopwords=STOPWORDS['en'])
