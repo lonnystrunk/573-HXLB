@@ -115,6 +115,20 @@ class Topic:
     def dump_sentences(self):
         return [sent for doc in self.docs for sent in doc.sentences]
 
+    def dump_firsts(self, weight):
+        firsts = []
+        first = False
+        for doc in self.docs:
+            first = True
+            for sent in doc.sentences:
+                if first:
+                    firsts.append(weight)
+                    first=False
+                else:
+                    firsts.append(1.0)
+        return firsts
+
+
     def dump_chrono(self):
         return [doc.date for doc in self.docs for sent in doc.sentences]
 
