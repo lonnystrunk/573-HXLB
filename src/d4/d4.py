@@ -1,4 +1,4 @@
-import re
+import re, pathlib
 from lxml import etree
 from lxml import html
 from lexrank import STOPWORDS, LexRank
@@ -121,6 +121,20 @@ class Topic:
 
     def dump_sentences(self):
         return [sent for doc in self.docs for sent in doc.sentences]
+
+    def dump_firsts(self, weight):
+        firsts = []
+        first = False
+        for doc in self.docs:
+            first = True
+            for sent in doc.sentences:
+                if first:
+                    firsts.append(weight)
+                    first=False
+                else:
+                    firsts.append(1.0)
+        return firsts
+
 
     def dump_chrono(self):
         return [doc.date for doc in self.docs for sent in doc.sentences]
@@ -276,6 +290,33 @@ class Summarizer:
         summary_output.write('\n'.join(sentences))
         summary_output.close()
 
+    def test_firsts(self, lexrank_obj, weight, f):
+        rankings = self.make_rank(lexrank_obj)
+        sents = self.topic.dump_sentences()
+        firsts = self.topic.dump_firsts(weight)
+        reranked = [rankings[i]*firsts[i] for i in range(len(rankings))]
+        word_count = 0
+        idxs = []
+        while word_count <= 100:
+            best_idx = argmax(reranked)
+            word_count += len(sents[best_idx].split())
+            if word_count <= 100:
+                idxs.append(best_idx)
+                reranked[best_idx] = float("-inf")
+        f.write("weight: {}\n\trankings: {}\n\tfirsts: {}\n\treranked: {}\n".format(weight, [rankings[i] for i in idxs], [firsts[i] for i in idxs], [rankings[i]*firsts[i] for i in idxs]))
+        pathlib.Path("outputs/firsts/"+str(weight)).mkdir(parents=True, exist_ok=True)
+        c = 0
+        t = len(idxs)
+        for idx in idxs:
+            if firsts[idx] == 1.0:
+                c+=1
+        selections = [sents[x] for x in idxs]
+        sumpath = "outputs/firsts/" + str(weight) + "/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8"
+        #summary_output = open(sumpath, 'w')
+        summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        summary_output.write('\n'.join(selections))
+        summary_output.close()
+        return(c,t)
 
     @staticmethod
     def _stemming(lexrank_docs):
