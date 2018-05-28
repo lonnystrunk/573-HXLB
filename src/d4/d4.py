@@ -356,10 +356,10 @@ class Conductor:
 
     def _make_lexrank_obj(self):
         idf_docs = [doc for summ in self.summarizers for doc in summ.topic.docs]
-        print('idf_docs before length: {}'.format(len(idf_docs)))
+        # print('idf_docs before length: {}'.format(len(idf_docs)))
         seen = set()
         idf_docs = [doc for doc in idf_docs if doc.id not in seen and not seen.add(doc.id)] # uniqify list of docs
-        print('idf_docs after length: {}'.format(len(idf_docs)))
+        # print('idf_docs after length: {}'.format(len(idf_docs)))
 
         if STEMMING:
             idf_docs = [Summarizer._stemming(doc) for doc in idf_docs]
