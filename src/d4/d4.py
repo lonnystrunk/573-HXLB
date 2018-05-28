@@ -151,7 +151,6 @@ class Summarizer:
         if STEMMING:
             stemmed_decs = self._stemming(lexrank_docs)
             summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=LEXRANK_SUMM_SIZE, threshold=LEXRANK_THRESHOLD)
-            #summary = [lexrank_docs[x] for x in summary_idx]
         else:
             summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=LEXRANK_SUMM_SIZE, threshold=LEXRANK_THRESHOLD)
         
@@ -272,22 +271,31 @@ class Summarizer:
 
     # parses List of rankings and List of sentences to return summary
     def chrono_summarize(self, lexrank_obj):
-        rankings = self.make_rank(lexrank_obj)
-        sents = self.topic.dump_sentences()
+        lexrank_docs = self.topic.dump_sentences()
         chrono = self.topic.dump_chrono()
-        word_count = 0
-        idxs = []
-        while word_count <= 100:
-            best_idx = argmax(rankings)
-            word_count += len(sents[best_idx].split())
-            if word_count <=100:
-                idxs.append(best_idx)
-                rankings[best_idx] = float("-inf")
-        chrono = [dt.strptime(chrono[x], "%Y%m%d") for x in idxs]
-        selections = [sents[x] for x in idxs]
+
+        if STEMMING:
+            stemmed_decs = self._stemming(lexrank_docs)
+            summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=LEXRANK_SUMM_SIZE,
+                                                  threshold=LEXRANK_THRESHOLD)
+        else:
+            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=LEXRANK_SUMM_SIZE,
+                                                  threshold=LEXRANK_THRESHOLD)
+
+        selections = [lexrank_docs[x] for x in summary_idx]
+        chrono = [dt.strptime(chrono[x], "%Y%m%d") for x in summary_idx]
         sentences = [x for _, x in sorted(zip(chrono, selections))]
         summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
-        summary_output.write('\n'.join(sentences))
+
+        word_count = 0
+        word_count_total = 0
+        while word_count <= 100:
+            sent = selections[0]
+            word_count += len(sent.split())
+            if word_count <= 100:
+                summary_output.write(sent + "\n")
+                word_count_total += len(sent.split())
+            selections.pop(0)
         summary_output.close()
 
     def test_firsts(self, lexrank_obj, weight, f):
