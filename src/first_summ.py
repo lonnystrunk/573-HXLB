@@ -8,9 +8,12 @@ from d4 import d4 as summarize
 if __name__ == '__main__':
     xml_files = [os.path.join(sys.argv[1], f) for f in os.listdir(sys.argv[1]) if re.match(r'.+\.xml', f)]
     conductor = summarize.Conductor(xml_files)
-    weights = [0.75, 0.8, 0.85, 0.90, 0.95, 0.99, 0.999, 1.001, 1.01, 1.05, 1.1, 1.15, 1.2, 1.25]
+    #weights = [0.75, 0.8, 0.85, 0.90, 0.95, 0.99, 0.999, 1.001, 1.01, 1.05, 1.1, 1.15, 1.2, 1.25]
+    weights = [1.001]
     f = open("outputs/D4/first_percent", 'w')
+    f.write("hi there!\n")
     for weight in weights:
+        f.write("taking on {} now\n")
         c = 0
         t = 0
         for summ in conductor.summarizers:
