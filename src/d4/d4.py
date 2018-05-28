@@ -1,4 +1,4 @@
-import re, pathlib
+import re, pathlib, gzip
 from lxml import etree
 from lxml import html
 from lexrank import STOPWORDS, LexRank
@@ -31,7 +31,7 @@ class Document:
             # AQUAINT-2 reference
             affix, dateno = self.id.rsplit("_", 1)[0].lower(), self.id.rsplit("_", 1)[1]
             self.date, doc_no = dateno.split(".")[0], dateno.split(".")[1]
-            file_name = affix+"_"+self.date[:-2]+".xml"
+            file_name = affix+"_"+self.date[:-2]+".gz"
             file_path = "AQUAINT-2/data/"+affix+"/"+file_name
         else:
             # AQUAINT-1 reference
@@ -59,7 +59,9 @@ class Document:
     def _get_sentences(self):
         text_block = []
         if self.is_aquaint_two:
-            f = open(self.file_path, 'r')
+            zipfile = gzip.open(self.file_path, 'r')
+            f = zipfile.read()
+            zipfile.close()
             new_doc = etree.parse(f)
             target_docs = new_doc.findall("DOC")
             for each in target_docs:

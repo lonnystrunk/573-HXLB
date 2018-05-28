@@ -7,7 +7,7 @@ fi
 if [ ! -L "AQUAINT" ] || [ ! -L "AQUIANT-2" ]
 then
     ln -sf /corpora/LDC/LDC02T31/ AQUAINT
-    ln -sf /corpora/LDC/LDC08T25/ AQUAINT-2
+    ln -sf /corpora/LDC/LDC11T07/ AQUAINT-2
 fi
 
 . py36/bin/activate
