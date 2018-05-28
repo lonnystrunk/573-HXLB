@@ -155,6 +155,16 @@ class Summarizer:
             summary_idx = lexrank_obj.get_summary(stemmed_docs, summary_size=5, threshold=.1)
         else:
             summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=5, threshold=.1)
+        
+        summary_idx = summary_idx.tolist()
+        temp_summary = [lexrank_docs[x] for x in summary_idx]
+        sent_set = set()
+        for temp_sent in temp_summary:
+            orig = len(sent_set)
+            sent_set.add(temp_sent)
+            if len(sent_set) == orig:
+                position = temp_summary.index(temp_sent)
+                summary_idx.pop(position)
 
         document = []
         for index in summary_idx:
