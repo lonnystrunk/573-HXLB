@@ -4,6 +4,9 @@ import re
 
 from d4 import d4 as summarize
 
+# GLOBAL VARIABLES
+ORDERING_METHOD = 2 # 1 - Easy; 2 - Greedy; 3 - Chronological
+
 
 if __name__ == '__main__':
     # TODO: iterate over all xml files
@@ -11,5 +14,9 @@ if __name__ == '__main__':
     conductor = summarize.Conductor(xml_files)
     #print(len(conductor.summarizers))
     for summ in conductor.summarizers:
-        #summ.easy_summarize(conductor.lexrank_obj)
-        summ.ordered_summarize(conductor.lexrank_obj)
+        if ORDERING_METHOD == 1:
+            summ.easy_summarize(conductor.lexrank_obj)
+        elif ORDERING_METHOD == 2:
+            summ.ordered_summarize(conductor.lexrank_obj)
+        elif ORDERING_METHOD == 3:
+            summ.chrono_summarize(conductor.lexrank_obj)

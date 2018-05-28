@@ -7,6 +7,13 @@ from datetime import datetime as dt
 from numpy import argmax
 from takahe import takahe
 
+# GLOBAL VARIABLES
+LEXRANK_SUMM_SIZE = 5
+LEXRANK_THRESHOLD = 0.1
+STEMMING = True
+COMPRESS = False
+
+
 class Document:
     def __init__(self, doc_element):
         self.doc_element = doc_element
@@ -125,14 +132,14 @@ class Summarizer:
         self.topic = Topic(self.topic_element)
 
     #parses List of Sentences with lexrank to output summary
-    def easy_summarize(self, lexrank_obj, stemming=True):
+    def easy_summarize(self, lexrank_obj):
         lexrank_docs = self.topic.dump_sentences()
-        if stemming:
+        if STEMMING:
             stemmed_decs = self._stemming(lexrank_docs)
-            summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=10, threshold=.1)
+            summary_idx = lexrank_obj.get_summary(stemmed_decs, summary_size=LEXRANK_SUMM_SIZE, threshold=LEXRANK_THRESHOLD)
             #summary = [lexrank_docs[x] for x in summary_idx]
         else:
-            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=10, threshold=.1)
+            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=LEXRANK_SUMM_SIZE, threshold=LEXRANK_THRESHOLD)
         
         summary = [lexrank_docs[x] for x in summary_idx]
         summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
@@ -148,13 +155,13 @@ class Summarizer:
             summary.pop(0)
         summary_output.close()
 
-    def ordered_summarize(self, lexrank_obj, stemming=True, compress=False):
+    def ordered_summarize(self, lexrank_obj):
         lexrank_docs = self.topic.dump_sentences()
-        if stemming:
+        if STEMMING:
             stemmed_docs = self._stemming(lexrank_docs)
-            summary_idx = lexrank_obj.get_summary(stemmed_docs, summary_size=5, threshold=.1)
+            summary_idx = lexrank_obj.get_summary(stemmed_docs, summary_size=LEXRANK_SUMM_SIZE, threshold=LEXRANK_THRESHOLD)
         else:
-            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=5, threshold=.1)
+            summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=LEXRANK_SUMM_SIZE, threshold=LEXRANK_THRESHOLD)
         
         summary_idx = summary_idx.tolist()
         temp_summary = [lexrank_docs[x] for x in summary_idx]
@@ -179,7 +186,7 @@ class Summarizer:
                 new_sent = re.sub(header_pattern, "", summary[0])
                 summary[0] = new_sent
 
-        if compress:
+        if COMPRESS:
             compressed_summary = []
             for i,k in zip(summary[0::2],summary[1::2]):
                 if self.compress_sentences(i,k):
@@ -298,9 +305,9 @@ class Conductor:
                 summarizers.append(Summarizer(topic_element))
         return summarizers
 
-    def _make_lexrank_obj(self, stemming=True):
+    def _make_lexrank_obj(self):
         idf_docs = [doc for summ in self.summarizers for doc in summ.topic.docs]
-        if stemming:
+        if STEMMING:
             idf_docs = [Summarizer._stemming(doc) for doc in idf_docs]
         lxr = LexRank(idf_docs, stopwords=STOPWORDS['en'])
         # print(lxr._calculate_idf())
