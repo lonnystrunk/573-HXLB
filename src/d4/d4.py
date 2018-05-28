@@ -5,7 +5,7 @@ from lexrank import STOPWORDS, LexRank
 import nltk
 from datetime import datetime as dt
 from numpy import argmax
-
+from takahe import takahe
 
 class Document:
     def __init__(self, doc_element):
@@ -148,12 +148,11 @@ class Summarizer:
             summary.pop(0)
         summary_output.close()
 
-    def ordered_summarize(self, lexrank_obj, stemming=True):
+    def ordered_summarize(self, lexrank_obj, stemming=True, compress=False):
         lexrank_docs = self.topic.dump_sentences()
         if stemming:
             stemmed_docs = self._stemming(lexrank_docs)
             summary_idx = lexrank_obj.get_summary(stemmed_docs, summary_size=5, threshold=.1)
-
         else:
             summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=5, threshold=.1)
 
@@ -170,6 +169,16 @@ class Summarizer:
                 new_sent = re.sub(header_pattern, "", summary[0])
                 summary[0] = new_sent
 
+        if compress:
+            compressed_summary = []
+            for i,k in zip(summary[0::2],summary[1::2]):
+                if self.compress_sentences(i,k):
+                    compressed_summary.append(self.compress_sentences(i,k))
+                else:
+                    compressed_summary.append(i)
+                    compressed_summary.append(k)
+            summary = compressed_summary  
+
         summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
         
         word_count = 0
@@ -184,6 +193,18 @@ class Summarizer:
             summary.pop(0)
         summary_output.close()
 
+    def compress_sentences(self,sentence1,sentence2):
+        sent1 = ' '.join([word + '/' + pos for word,pos in nltk.pos_tag(nltk.word_tokenize(sentence1))])
+        sent2 = ' '.join([word + '/' + pos for word,pos in nltk.pos_tag(nltk.word_tokenize(sentence2))])
+        sent1 = re.sub(r'/(\.|,)','/PUNCT',sent1)
+        sent2 = re.sub(r'/(\.|,)','/PUNCT',sent2)
+
+        compresser = takahe.word_graph([sent1,sent2], nb_words = 15, lang = 'en', punct_tag = "PUNCT" )
+        candidates = compresser.get_compression(1)
+        for cummulative_score, path in candidates:
+            normalized_score = cummulative_score / len(path)
+            #print(round(normalized_score, 3), ' '.join([u[0] for u in path]))
+            return ' '.join([u[0] for u in path])
 
     def get_coherence(self,lexrank_obj,document,lexrank_docs):
         n = len(document)
