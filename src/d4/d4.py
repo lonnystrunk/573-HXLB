@@ -59,10 +59,10 @@ class Document:
     def _get_sentences(self):
         text_block = []
         if self.is_aquaint_two:
-            zipfile = gzip.open(self.file_path, 'r')
-            f = zipfile.read()
-            zipfile.close()
-            new_doc = etree.parse(f)
+            print(self.file_path)
+            f = gzip.open(self.file_path, 'rt')
+            g = "<root>"+f.read()+"</root>"
+            new_doc = etree.fromstring(g)
             target_docs = new_doc.findall("DOC")
             for each in target_docs:
                 if each.attrib["id"] == self.id:
