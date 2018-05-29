@@ -6,6 +6,7 @@ import nltk
 from datetime import datetime as dt
 from numpy import argmax
 from takahe import takahe
+from io import StringIO
 
 # GLOBAL VARIABLES
 LEXRANK_SUMM_SIZE = 5
@@ -62,7 +63,8 @@ class Document:
             print(self.file_path)
             f = gzip.open(self.file_path, 'rt')
             g = "<root>"+f.read()+"</root>"
-            new_doc = etree.fromstring(g)
+            new_parser = etree.XMLParser(encoding='utf-8', recover=True)
+            new_doc = etree.parse(StringIO(g), new_parser)
             target_docs = new_doc.findall("DOC")
             for each in target_docs:
                 if each.attrib["id"] == self.id:
