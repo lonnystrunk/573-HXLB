@@ -12,6 +12,13 @@ fi
 
 . py36/bin/activate
 pip install -r src/requirements.txt
-python src/summarize.py $@
-python /dropbox/17-18/573/code/ROUGE/run_rouge.py src/rouge_run_ex.xml > results/D4_rouge_scores.out
+
+python src/summarize.py /dropbox/17-18/573/Data/Documents/devtest/ D4_devtest &
+python src/summarize.py /dropbox/17-18/573/Data/Documents/evaltest/ D4_evaltest &
+wait
+
+python /dropbox/17-18/573/code/ROUGE/run_rouge.py src/rouge_dev.xml > results/D4_devtest_rouge_scores.out &
+python /dropbox/17-18/573/code/ROUGE/run_rouge.py src/rouge_eval.xml > results/D4_evaltest_rouge_scores.out &
+wait
+
 deactivate

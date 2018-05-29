@@ -145,8 +145,9 @@ class Topic:
 
 
 class Summarizer:
-    def __init__(self, topic_element):
+    def __init__(self, topic_element, output_dir_name):
         self.topic_element = topic_element #Topic to be processed
+        self.output_dir_name = output_dir_name
         self.topic = Topic(self.topic_element)
 
     #parses List of Sentences with lexrank to output summary
@@ -159,7 +160,7 @@ class Summarizer:
             summary_idx = lexrank_obj.get_summary(lexrank_docs, summary_size=LEXRANK_SUMM_SIZE, threshold=LEXRANK_THRESHOLD)
         
         summary = [lexrank_docs[x] for x in summary_idx]
-        summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        summary_output = open("outputs/" + self.output_dir_name + "/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
 
         word_count = 0
         word_count_total = 0
@@ -213,7 +214,7 @@ class Summarizer:
                     compressed_summary.append(k)
             summary = compressed_summary  
 
-        summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        summary_output = open("outputs/" + self.output_dir_name + "/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
         
         word_count = 0
         word_count_total = 0
@@ -289,7 +290,7 @@ class Summarizer:
         selections = [lexrank_docs[x] for x in summary_idx]
         chrono = [dt.strptime(chrono[x], "%Y%m%d") for x in summary_idx]
         sentences = [x for _, x in sorted(zip(chrono, selections))]
-        summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        summary_output = open("outputs/" + self.output_dir_name + "/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
 
         word_count = 0
         word_count_total = 0
@@ -325,7 +326,7 @@ class Summarizer:
         selections = [sents[x] for x in idxs]
         sumpath = "outputs/firsts/" + str(weight) + "/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8"
         #summary_output = open(sumpath, 'w')
-        summary_output = open("outputs/D4/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
+        summary_output = open("outputs/" + self.output_dir_name + "/" + self.topic.id[:-1] + "-A.M.100." + self.topic.id[-1] + ".8", 'w')
         summary_output.write('\n'.join(selections))
         summary_output.close()
         return(c,t)
@@ -343,8 +344,9 @@ class Summarizer:
 
 
 class Conductor:
-    def __init__(self, itinerary):
+    def __init__(self, itinerary, output_dir_name):
         self.itineraries = itinerary #path to .xml file with names of training documents
+        self.output_dir_name = output_dir_name
         self.summarizers = self._make_summarizers()
         self.lexrank_obj = self._make_lexrank_obj()
 
@@ -355,7 +357,7 @@ class Conductor:
             doc = etree.parse(itinerary)
             list_of_topic_elements = doc.findall("topic")
             for topic_element in list_of_topic_elements:
-                summarizers.append(Summarizer(topic_element))
+                summarizers.append(Summarizer(topic_element, self.output_dir_name))
         return summarizers
 
     def _make_lexrank_obj(self):

@@ -4,6 +4,6 @@ getenv          = true
 output          = outputs/run_summarize.out
 error           = outputs/run_summarize.err
 log             = outputs/run_summarize.log
-arguments       = "/dropbox/17-18/573/Data/Documents/evaltest/"
+arguments       = ""
 transfer_executable = false
 queue
